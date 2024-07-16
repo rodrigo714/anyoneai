@@ -1,0 +1,9 @@
+black[jupyter]
+gdown
+isort
+jupyter
+matplotlib
+pytest
+protobuf
+scikit_learn
+tensorflow
