@@ -149,7 +149,11 @@ def create_resnet50_model(
     #   2. Don't include the classification layer (include_top=False)
     #   3. Define model input_shape equals to this function input_shape
     # TODO
-    resnet = ...
+    resnet = ResNet50(
+        weights='imagenet',
+        input_shape=input_shape,
+        include_top=False
+    )
 
     # You shouldn't change the code below
     # Freeze all layers in the ResNet50 model
