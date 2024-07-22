@@ -1,3 +1,4 @@
 venv/
 dataset/
 **/cars_25_dataset.zip
+venv-directml/

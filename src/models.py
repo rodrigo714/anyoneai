@@ -50,7 +50,7 @@ def create_mlp_model(input_shape: Tuple[int, int, int], num_classes: int) -> Seq
     # Layer 4: Fully connected layer with 512 neurons,
     # followed by a relu activation function
     # TODO
-    model.add(Dense(1024, activation='relu'))
+    model.add(Dense(512, activation='relu'))
 
     # Layer 5: Classification layer with num_classes output units,
     # followed by a softmax activation function
@@ -89,7 +89,7 @@ def create_lenet_model(
     # Layer 1: Convolutional layer with 6 filters, each 3x3 in size,
     # followed by a tanh activation function
     # TODO
-    model.add(Conv2D(6, kernel_size=(5, 5), activation='tanh'))
+    model.add(Conv2D(6, kernel_size=(3, 3), activation='tanh'))
 
     # Layer 2: Average pooling layer with 2x2 pool size
     # TODO
@@ -98,7 +98,7 @@ def create_lenet_model(
     # Layer 3: Convolutional layer with 16 filters, each 3x3 in size,
     # followed by a tanh activation function
     # TODO
-    model.add(Conv2D(16, kernel_size=(5, 5), activation='tanh'))
+    model.add(Conv2D(16, kernel_size=(3, 3), activation='tanh'))
 
     # Layer 4: Average pooling layer with 2x2 pool size
     # TODO
