@@ -89,39 +89,39 @@ def create_lenet_model(
     # Layer 1: Convolutional layer with 6 filters, each 3x3 in size,
     # followed by a tanh activation function
     # TODO
-    model.add(...)
+    model.add(Conv2D(6, kernel_size=(5, 5), activation='tanh'))
 
     # Layer 2: Average pooling layer with 2x2 pool size
     # TODO
-    model.add(...)
+    model.add(AveragePooling2D(pool_size=(2, 2)))
 
     # Layer 3: Convolutional layer with 16 filters, each 3x3 in size,
     # followed by a tanh activation function
     # TODO
-    model.add(...)
+    model.add(Conv2D(16, kernel_size=(5, 5), activation='tanh'))
 
     # Layer 4: Average pooling layer with 2x2 pool size
     # TODO
-    model.add(...)
+    model.add(AveragePooling2D(pool_size=(2, 2)))
 
     # Layer 5: Flatten layer to convert the output of the previous layer to a 1D array
     # TODO
-    model.add(...)
+    model.add(Flatten())
 
     # Layer 6: Fully connected layer with 120 neurons,
     # followed by a tanh activation function
     # TODO
-    model.add(...)
+    model.add(Dense(120, activation='tanh'))
 
     # Layer 7: Fully connected layer with 84 neurons,
     # followed by a tanh activation function
     # TODO
-    model.add(...)
+    model.add(Dense(84, activation='tanh'))
 
     # Layer 8: Classification layer with num_classes output units,
     # followed by a softmax activation function
     # TODO
-    model.add(...)
+    model.add(Dense(num_classes, activation='softmax'))
 
     # Print a summary of the model architecture
     print(model.summary())
