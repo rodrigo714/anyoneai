@@ -3,9 +3,12 @@ from tensorflow import keras
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
+print("Tensorflow version " + tf.__version__)
+
 from keras import layers
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping
-from keras.applications.inception_v3 import InceptionV3, preprocess_input as inception_preprocess_input
+from keras.applications.efficientnet_v2 import EfficientNetV2B0, preprocess_input as efficient_preprocess_input
+
 from src import data_utils, config
 from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
 
@@ -75,41 +78,41 @@ data_augmentation = keras.Sequential(
 # Apply data augmentation
 augmented_inputs = data_augmentation(inputs)
 
-# Preprocess inputs for InceptionV3
-preprocessed_inputs = inception_preprocess_input(augmented_inputs)
+# Preprocess inputs for EfficientNetV2
+preprocessed_inputs = efficient_preprocess_input(augmented_inputs)
 
-# Load the InceptionV3 model with pre-trained ImageNet weights, excluding the top layers
-inception = InceptionV3(
+# Load the EfficientNetV2 model with pre-trained ImageNet weights, excluding the top layers
+efficientV2 = EfficientNetV2B0(
     include_top=False, 
     input_shape=preprocessed_inputs.shape[1:], 
     weights='imagenet')
 
 # Set the last 10 layers to trainable
-for layer in inception.layers:
+for layer in efficientV2.layers:
     layer.trainable = False
 
 # Create the model
-inception_model = tf.keras.Sequential()
-inception_model.add(inception)
-inception_model.add(layers.GlobalAveragePooling2D())
-inception_model.add(layers.BatchNormalization())
-# inception_model.add(layers.Dense(512, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.01)))
-# inception_model.add(layers.Dropout(0.6))
-# inception_model.add(layers.BatchNormalization())
-# inception_model.add(layers.Dense(1024, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.01)))
-# inception_model.add(layers.Dropout(0.6))
-# inception_model.add(layers.BatchNormalization())
-# inception_model.add(layers.Dense(512, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.01)))
-# inception_model.add(layers.Dropout(0.6))
-# inception_model.add(layers.BatchNormalization())
-inception_model.add(layers.Dense(len(class_names), activation='softmax'))
+efficient_model = tf.keras.Sequential()
+efficient_model.add(efficientV2)
+efficient_model.add(layers.GlobalAveragePooling2D())
+efficient_model.add(layers.BatchNormalization())
+efficient_model.add(layers.Dense(512, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.01)))
+efficient_model.add(layers.Dropout(0.6))
+efficient_model.add(layers.BatchNormalization())
+efficient_model.add(layers.Dense(1024, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.01)))
+efficient_model.add(layers.Dropout(0.6))
+efficient_model.add(layers.BatchNormalization())
+efficient_model.add(layers.Dense(512, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.01)))
+efficient_model.add(layers.Dropout(0.6))
+efficient_model.add(layers.BatchNormalization())
+efficient_model.add(layers.Dense(len(class_names), activation='softmax'))
 
 # Print a summary of the model architecture
-print(inception_model.summary())
+print(efficient_model.summary())
 
 # Compile the model
-inception_model.compile(
-    optimizer=tf.keras.optimizers.Adam(5e-4),
+efficient_model.compile(
+    optimizer=tf.keras.optimizers.Adam(1e-3),
     loss="categorical_crossentropy",
     metrics=["accuracy"],
 )
@@ -125,7 +128,7 @@ lr_scheduler = ReduceLROnPlateau(
 early_stopping = EarlyStopping(patience=5, restore_best_weights=True)
 
 # Train the model
-history = inception_model.fit(
+history = efficient_model.fit(
     train_ds,
     validation_data=test_ds,
     epochs=50,
@@ -147,7 +150,7 @@ y_true = np.concatenate([y for x, y in test_ds], axis=0)
 if y_true.ndim > 1 and y_true.shape[1] > 1:
     y_true = np.argmax(y_true, axis=1)
 
-y_pred = inception_model.predict(test_ds)
+y_pred = efficient_model.predict(test_ds)
 y_pred_classes = np.argmax(y_pred, axis=1)
 
 print(classification_report(y_true, y_pred_classes, target_names=class_names))
